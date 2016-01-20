@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MVC</title>
+</head>
+<body>
+<script type="text/javascript">
+  var createView = function () {
+    var that = this,
+      select = document.createElement('select'),
+      input = document.createElement('input'),
+      addButton = document.createElement('button'),
+      removeButton = document.createElement('button'),
+      elements;
+
+    addButton.innerText = 'Add';
+    removeButton.innerText = 'Remove';
+    select.setAttribute('size', 10);
+
+    elements = [select, input, addButton, removeButton];
+
+    this.render = function () {
+      elements.forEach(function (element) {
+        document.body.appendChild(element);
+      }); 
+    };
+
+    this.addSelectOption = function (inputText) {
+      var option = document.createElement('option');
+
+      option.innerText = inputText;
+      select.appendChild(option);
+    }
+
+    this.removeSelectedOption = function (index) {
+      select.remove(index);
+    }
+
+    this.clearInput = function () {
+      input.value = '';
+    }
+
+    this.select = select;
+    this.addButton = addButton;
+    this.removeButton = removeButton;
+    this.input = input;
+
+    return this;
+  }
+
+  var createController = function (view, model) {
+    var that = this;
+
+    view.addButton.onclick = function () {
+      view.addSelectOption(model.inputText);
+      view.clearInput();
+    };
+
+    view.removeButton.onclick = function () {
+      view.removeSelectedOption(model.selectedOptionIndex);
+    };
+
+    view.input.oninput = function () {
+      model.inputText = view.input.value;
+    };
+
+    view.select.onchange = function () {
+      model.selectedOptionIndex = view.select.selectedIndex;
+    }
+  }
+
+  var model = {};
+
+  var view = createView();
+
+  view.render();
+
+  createController(view, model);
+</script>
+</body>
+</html>
